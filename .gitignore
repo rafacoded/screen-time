@@ -1,15 +1,29 @@
+# IntelliJ / Android Studio
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+.idea/
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+
+# Gradle
+.gradle/
 local.properties
+
+# Build outputs
+/build/
+app/build/
+*/build/
+
+# NDK, CMake y cosas nativas
+.cxx/
+.externalNativeBuild/
+
+# Capturas del emulador
+/captures/
+
+# Archivos temporales
+*.log
+
+# Configuración de Gradle Wrapper (estos sí se deben subir)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat

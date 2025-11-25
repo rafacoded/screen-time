@@ -1,5 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Colores principales -->
+    <color name="colorPrimary">#1C1C24</color>        <!-- Negro cine -->
+    <color name="colorPrimaryVariant">#2A2A35</color> <!-- Gris oscuro suave -->
+    <color name="colorOnPrimary">#FFFFFF</color>      <!-- Texto sobre primary -->
+
+    <!-- Secundarios -->
+    <color name="colorSecondary">#C6A667</color>      <!-- Dorado palomita -->
+    <color name="colorSecondaryVariant">#B08E54</color>
+    <color name="colorOnSecondary">#000000</color>
+
+    <!-- Acentos -->
+    <color name="colorAccent">#E63946</color>         <!-- Rojo alfombra roja -->
+    <color name="colorAccentVariant">#C5303B</color>
+
+    <!-- Fondos -->
+    <color name="colorBackground">#121216</color>     <!-- Pantalla oscura -->
+    <color name="colorSurface">#1E1E25</color>        <!-- Tarjetas/elementos -->
+    <color name="colorOnSurface">#FFFFFF</color>
+
+    <!-- Estados -->
+    <color name="colorSuccess">#4CAF50</color>        <!-- Recordatorios OK -->
+    <color name="colorWarning">#FFC107</color>
+    <color name="colorError">#F44336</color>
 </resources>
