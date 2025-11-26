@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">ScreenTime</string>
+
+    <!-- Inicio -->
+    <!-- Slide Bar -->
+    <string name="slide_option1">Perfil</string>
+    <string name="slide_option2">Configuración</string>
+    <string name="slide_option3">Sobre Nostros</string>
+    <string name="slide_option4">Cerrar Sesión</string>
+
+    <string name="user_name">Usuario</string>
+
+    <!-- Pestañas -->
+    <string name="tab1">Pendientes</string>
+    <string name="tab2">Viendo</string>
+    <string name="tab3">Vistas</string>
+
+
 </resources>

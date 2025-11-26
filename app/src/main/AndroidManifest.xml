@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".paginas/HomeActivity"/>
+        <activity android:name=".paginas.HomeActivity"/>
     </application>
 
 </manifest>
