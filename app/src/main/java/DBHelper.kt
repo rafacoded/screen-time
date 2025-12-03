@@ -23,7 +23,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val createPelicula = """
             CREATE TABLE $TABLE_PELICULA (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                fechasalida DATETIME,
+                fechasalida TEXT,
                 genero TEXT,
                 nombre TEXT,
                 sinopsis TEXT,
@@ -38,7 +38,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 descripcion TEXT,
                 calificacion INTEGER,
-                fecha DATETIME,
+                fecha TEXT,
                 id_pelicula INTEGER,
                 FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id)
             )
@@ -66,8 +66,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT,
                 descripcion TEXT,
-                fecha DATETIME,
-                fechapeli DATETIME,
+                fecha TEXT,
                 id_pelicula INTEGER,
                 id_usuario INTEGER,
                 FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id),
@@ -142,14 +141,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun insertResenya (
         descripcion: String,
         calificacion: Int,
-        fecha: Date,
+        fecha: String,
         id_pelicula: Int
     ): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("descripcion", descripcion)
             put("calificacion", calificacion)
-            put("fecha", fecha.time)
+            put("fecha", fecha)
             put("id_pelicula", id_pelicula)
         }
         return db.insert(TABLE_RESENYA, null, values)
@@ -162,14 +161,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         id: Int,
         descripcion: String,
         calificacion: Int,
-        fecha: Date,
+        fecha: String,
         id_pelicula: Int
     ): Int {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("descripcion",descripcion)
             put("calificacion",calificacion)
-            put("fecha",fecha.date)
+            put("fecha",fecha)
             put("id_pelicula",id_pelicula)
         }
         return db.update(TABLE_RESENYA, values, "id = ?", arrayOf(id.toString()))
@@ -233,7 +232,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         nombre: String,
         descripcion: String?,
         fecha: Date,
-        fechapeli: Date?,
         id_pelicula: Int?,
         id_usuario: Int?
     ): Long {
@@ -242,7 +240,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("nombre", nombre)
             put("descripcion", descripcion)
             put("fecha", fecha.time)
-            if (fechapeli != null) put("fechapeli", fechapeli.time)
             if (id_pelicula != null) put("id_pelicula", id_pelicula)
             if (id_usuario != null) put("id_usuario", id_usuario)
         }
@@ -258,8 +255,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         id: Int,
         nombre: String,
         descripcion: String?,
-        fecha: Date,
-        fechapeli: Date?,
+        fecha: String,
         id_pelicula: Int?,
         id_usuario: Int?
     ): Int {
@@ -267,8 +263,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val values = ContentValues().apply {
             put("nombre", nombre)
             put("descripcion", descripcion)
-            put("fecha", fecha.time)
-            if (fechapeli != null) put("fechapeli", fechapeli.time)
+            put("fecha", fecha)
             if (id_pelicula != null) put("id_pelicula", id_pelicula)
             if (id_usuario != null) put("id_usuario", id_usuario)
         }
