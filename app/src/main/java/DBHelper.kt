@@ -3,6 +3,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.screentime.models.Pelicula
 import java.util.Date
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -109,6 +110,29 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         }
         return db.insert(TABLE_PELICULA, null, values)
     }
+
+    fun getPeliculaById(id: Int): Pelicula? {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM pelicula WHERE id = ?", arrayOf(id.toString()))
+
+        return if (cursor.moveToFirst()) {
+            val pelicula = Pelicula(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
+                fechasalida = cursor.getLong(cursor.getColumnIndexOrThrow("fechasalida")),
+                sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
+                emitida = cursor.getInt(cursor.getColumnIndexOrThrow("emitida")) == 1
+            )
+            cursor.close()
+            pelicula
+        } else {
+            cursor.close()
+            null
+        }
+    }
+
+
 
     fun getAllPeliculas(): Cursor {
         val db = this.readableDatabase

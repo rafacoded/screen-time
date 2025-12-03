@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Imagen de portada -->
         <ImageView
             android:id="@+id/ivPortada"
             android:layout_width="match_parent"
@@ -18,7 +17,6 @@
             android:scaleType="centerCrop"
             android:contentDescription="@string/portada_pelicula" />
 
-        <!-- Título -->
         <TextView
             android:id="@+id/tvTitulo"
             android:layout_width="match_parent"
@@ -28,7 +26,6 @@
             android:textStyle="bold"
             android:paddingTop="12dp" />
 
-        <!-- Año y género -->
         <TextView
             android:id="@+id/tvInfo"
             android:layout_width="match_parent"
@@ -38,7 +35,6 @@
             android:textColor="#777777"
             android:paddingTop="4dp" />
 
-        <!-- RatingBar (solo muestra la nota) -->
         <RatingBar
             android:id="@+id/rbPuntuacion"
             android:layout_width="wrap_content"
@@ -48,7 +44,6 @@
             android:isIndicator="true"
             android:paddingTop="8dp" />
 
-        <!-- Chips de estado -->
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipEstado"
             android:layout_width="match_parent"
@@ -79,14 +74,12 @@
 
         </com.google.android.material.chip.ChipGroup>
 
-        <!-- Separador -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#DDDDDD"
             android:layout_marginTop="16dp" />
 
-        <!-- Botón abrir/añadir review -->
         <Button
             android:id="@+id/btnReview"
             android:layout_width="match_parent"
@@ -94,7 +87,6 @@
             android:text="Añadir review"
             android:layout_marginTop="16dp" />
 
-        <!-- Botón recordatorio -->
         <Button
             android:id="@+id/btnRecordatorio"
             android:layout_width="match_parent"
@@ -102,14 +94,12 @@
             android:text="Configurar recordatorio"
             android:layout_marginTop="8dp" />
 
-        <!-- Separador -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#DDDDDD"
             android:layout_marginTop="16dp" />
 
-        <!-- Descripción -->
         <TextView
             android:id="@+id/tvDescripcion"
             android:layout_width="match_parent"
