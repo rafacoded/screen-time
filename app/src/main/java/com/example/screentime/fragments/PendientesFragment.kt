@@ -1,6 +1,6 @@
 package com.example.screentime.fragments
 
-import DBHelper
+import com.example.screentime.database.DBHelper
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater

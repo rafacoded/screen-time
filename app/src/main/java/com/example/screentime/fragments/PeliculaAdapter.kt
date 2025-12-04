@@ -35,7 +35,7 @@ class PeliculaAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pelicula = lista[position]
 
-        holder.titulo.text = pelicula.titulo
+        holder.titulo.text = pelicula.nombre
         holder.chipGenero.text = pelicula.genero ?: "-"
 
         when (pelicula.estado) {

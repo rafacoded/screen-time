@@ -1,6 +1,6 @@
 package com.example.screentime.paginas
 
-import Conection.DBHelper
+import com.example.screentime.database.DBHelper
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Usuario o contraseña incorrecta!", Toast.LENGTH_LONG).show()
             }
 
-            cursor.close() // Cierra el cursor al final de todo.
+            cursor.close()
         }
 
     }

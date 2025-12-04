@@ -1,6 +1,6 @@
 package com.example.screentime.paginas
 
-import Conection.DBHelper
+import com.example.screentime.database.DBHelper
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
