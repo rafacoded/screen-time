@@ -57,12 +57,7 @@ class HomeActivity : AppCompatActivity() {
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> "Pendientes"
-                1 -> "Viendo"
-                2 -> "Vistas"
-                else -> ""
-            }
+            tab.text = if (position == 0) "Pendientes" else "Vistas"
         }.attach()
     }
 }

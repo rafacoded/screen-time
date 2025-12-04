@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/portada_pelicula" />
+            android:contentDescription="" />
 
         <TextView
             android:id="@+id/tvTitulo"
@@ -48,8 +48,7 @@
             android:id="@+id/chipEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:singleSelection="true">
+            android:paddingTop="12dp">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipPendiente"
@@ -58,12 +57,6 @@
                 android:text="Pendiente"
                 android:checkable="true" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipViendo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Viendo"
-                android:checkable="true" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipVista"

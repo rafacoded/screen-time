@@ -15,5 +15,9 @@
     <string name="tab2">Viendo</string>
     <string name="tab3">Vistas</string>
 
+    <!-- Chips estado -->
+    <string name="chipEstadoP">Pendiente</string>
+    <string name="chipEstadoV">Visto</string>
+
 
 </resources>

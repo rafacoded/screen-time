@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- PERMISOS PARA GLIDE-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,7 +26,11 @@
         </activity>
 
         <activity android:name=".paginas.HomeActivity"/>
+        <activity android:name=".paginas.PeliculaActivity"/>
+
+
 
     </application>
+
 
 </manifest>

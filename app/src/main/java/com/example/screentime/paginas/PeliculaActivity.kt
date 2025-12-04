@@ -44,7 +44,6 @@ class PeliculaActivity : AppCompatActivity() {
         val tvDescripcion = findViewById<TextView>(R.id.tvDescripcion)
         val tvInfo = findViewById<TextView>(R.id.tvInfo)
         val chipPendiente = findViewById<Chip>(R.id.chipPendiente)
-        val chipViendo = findViewById<Chip>(R.id.chipViendo)
         val chipVista = findViewById<Chip>(R.id.chipVista)
 
         val year = if (pelicula.fechasalida != null) {
