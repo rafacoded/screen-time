@@ -6,5 +6,6 @@ data class Pelicula(
     val genero: String?,
     val fechasalida: String?,
     val sinopsis: String?,
+    val estado: String?,
     val foto: String?
     )

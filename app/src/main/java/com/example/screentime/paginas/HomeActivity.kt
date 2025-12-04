@@ -5,10 +5,15 @@ import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.screentime.R
+import com.example.screentime.fragments.BuscarFragment
+import com.example.screentime.fragments.CalendarioFragment
+import com.example.screentime.fragments.HomeFragment
 import com.example.screentime.utils.MyPagerAdapter
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,41 +28,52 @@ class HomeActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
-        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+//        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+//        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navigationView)
 
+        val bottomNavBar = findViewById<BottomNavigationView>(R.id.bottomNav)
 
+        // DRAWER NAVIGATION
         toolbar.setNavigationOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_perfil -> {
-                    // Ir a activity: Perfil
-                }
-                R.id.nav_configuracion -> {
-                    // Ir a activity: Configuración
-                }
-                R.id.nav_sobre -> {
-                    // Ir a activity: Sobre Nosotros
-                }
-                R.id.nav_logout -> {
-                    // cerrar sesión
-                }
+                R.id.nav_perfil -> { }
+                R.id.nav_configuracion -> { }
+                R.id.nav_sobre -> { }
+                R.id.nav_logout -> { }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
-        val adapter = MyPagerAdapter(this)
-        viewPager.adapter = adapter
+        bottomNavBar.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    openFragment(HomeFragment())
+                    true
+                }
+                R.id.nav_buscar -> {
+                    openFragment(BuscarFragment())
+                    true
+                }
+                R.id.nav_calendar -> {
+                    openFragment(CalendarioFragment())
+                    true
+                }
+                else -> false
+            }
+        }
+    }
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = if (position == 0) "Pendientes" else "Vistas"
-        }.attach()
+    private fun openFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }

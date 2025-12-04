@@ -21,8 +21,8 @@ class PeliculaAdapter(
 
         val img = v.findViewById<ImageView>(R.id.ivCardImagen)
         val titulo = v.findViewById<TextView>(R.id.tvCardTitulo)
-        val chipGenero = v.findViewById<Chip>(R.id.chipGenero)
-        val chipEstado = v.findViewById<Chip>(R.id.chipEstado)
+        val chipGenero = v.findViewById<Chip>(R.id.chipGeneroCard)
+        val chipEstado = v.findViewById<Chip>(R.id.chipEstadoCard)
 
     }
 
@@ -38,16 +38,16 @@ class PeliculaAdapter(
         holder.titulo.text = pelicula.nombre
         holder.chipGenero.text = pelicula.genero ?: "-"
 
-//        when (pelicula.estado) {
-//            "pendiente" -> {
-//                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSecondary)
-//                holder.chipEstado.text = R.string.chipEstadoP.toString()
-//            }
-//            "vista"     -> {
-//                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSuccess)
-//                holder.chipEstado.text = R.string.chipEstadoV.toString()
-//            }
-//        }
+        when (pelicula.estado) {
+            "pendiente" -> {
+                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSecondary)
+                holder.chipEstado.text = R.string.chipEstadoP.toString()
+            }
+            "vista"     -> {
+                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSuccess)
+                holder.chipEstado.text = R.string.chipEstadoV.toString()
+            }
+        }
 
         Glide.with(holder.itemView.context)
             .load(pelicula.foto)

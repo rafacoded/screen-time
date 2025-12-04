@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val botonAcceso = findViewById<Button>(R.id.btnAcceder)
 
         botonAcceso.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
         }
 
     }

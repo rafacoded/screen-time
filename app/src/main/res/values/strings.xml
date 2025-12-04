@@ -16,9 +16,23 @@
     <string name="tab3">Vistas</string>
     <string name="portada_pelicula">Portada de la película</string>
 
-    <!-- Chips estado -->
+    <!-- Navigation Bar -->
+    <string name="navButton1">Inicio</string>
+    <string name="navButton2">Añadir</string>
+    <string name="navButton3">Calendario</string>
+
+    <!-- Info peliculas -->
+    <string name="txtSinopsis">Sinopsis</string>
+    <!-- Chips -->
+    <string name="chipGenero">Genero</string>
     <string name="chipEstadoP">Pendiente</string>
     <string name="chipEstadoV">Visto</string>
 
+
+    <!-- Pelicula Detalle Botones-->
+    <string name="btnAgregar">Agregar película</string>
+    <string name="btnReview">Realizar reseña</string>
+    <!-- maybe?? los recordatorios realmente se ajustarán a la fecha-->
+    <string name="btnRecordatorio">Agregar película</string>
 
 </resources>
