@@ -33,19 +33,21 @@
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipGenero"
+                android:id="@+id/chipGeneroCard"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/chipGenero"/>
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipEstado"
+                android:id="@+id/chipEstadoCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:checkable="false"
                 android:enabled="false"
                 android:textColor="@color/cardview_dark_background" />
-        </LinearLayout>
-    </LinearLayout>
 
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

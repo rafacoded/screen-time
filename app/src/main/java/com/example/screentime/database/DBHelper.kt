@@ -5,15 +5,16 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.screentime.models.Pelicula
+import java.time.LocalDate
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "screentime.db"
-        private const val DATABASE_VERSION = 1 // Si cambias el schema, incrementa este número.
-
-        // Nombres de las tablas para evitar errores de tipeo
+        private const val DATABASE_NAME = "screenTime.db"
+        private const val DATABASE_VERSION = 3
         const val TABLE_PELICULA = "pelicula"
         const val TABLE_RESENYA = "resenya"
         const val TABLE_USUARIO = "usuario"
@@ -21,20 +22,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         const val TABLE_PELICULAUSUARIO = "peliculausuario"
     }
 
-    /**
-     * Se llama justo después de crear la conexión a la BD, pero antes de crear el schema.
-     * Es el lugar ideal para habilitar características como las foreign keys.
-     */
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         db.setForeignKeyConstraintsEnabled(true)
     }
 
-    /**
-     * Se ejecuta UNA SOLA VEZ en la vida de la app: cuando el fichero de la BD
-     * no existe y necesita ser creado en el móvil.
-     * Aquí se define toda la estructura de tablas y se insertan los datos iniciales.
-     */
     override fun onCreate(db: SQLiteDatabase) {
         // --- CREACIÓN DE TABLAS ---
         // Se crean primero las tablas que NO tienen claves foráneas (FOREIGN KEYs).
@@ -77,7 +69,22 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id) ON DELETE CASCADE
             )
         """
-        db.execSQL(createResenyaTable)
+        db.execSQL(createResenya)
+
+        // Crear tabla usuario
+        val createUsuario = """
+            CREATE TABLE $TABLE_USUARIO (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT,
+                descripcion TEXT,
+                contraseña TEXT,
+                email TEXT,
+                fotoperfil TEXT,
+                id_resenya INTEGER,
+                FOREIGN KEY (id_resenya) REFERENCES $TABLE_RESENYA(id)
+            )
+        """.trimIndent()
+        db.execSQL(createUsuario)
 
         val createRecordatorioTable = """
             CREATE TABLE $TABLE_RECORDATORIO (

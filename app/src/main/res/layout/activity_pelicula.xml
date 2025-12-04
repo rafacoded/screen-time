@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <LinearLayout
@@ -14,12 +13,12 @@
         <ImageView
             android:id="@+id/ivPortada"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="500dp"
             android:scaleType="centerCrop"
             android:contentDescription="@string/portada_pelicula" />
 
         <TextView
-            android:id="@+id/tvTitulo"
+            android:id="@+id/tvNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Título de la Película"
@@ -27,14 +26,23 @@
             android:textStyle="bold"
             android:paddingTop="12dp" />
 
-        <TextView
-            android:id="@+id/tvInfo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2024 · Acción"
-            android:textSize="14sp"
-            android:textColor="#777777"
-            android:paddingTop="4dp" />
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="2024"
+                android:textSize="14sp"
+                android:textColor="#777777"/>
+
+
+        </LinearLayout>
 
         <RatingBar
             android:id="@+id/rbPuntuacion"
@@ -45,35 +53,24 @@
             android:isIndicator="true"
             android:paddingTop="8dp" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipEstado"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            app:singleSelection="true">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipPendiente"
+                android:id="@+id/chipEstadoDetalle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pendiente"
                 android:checkable="true" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipViendo"
+                android:id="@+id/chipGeneroDetalle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Viendo"
                 android:checkable="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipVista"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vista"
-                android:checkable="true" />
-
-        </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -85,14 +82,14 @@
             android:id="@+id/btnReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Añadir review"
+            android:text="@string/btnReview"
             android:layout_marginTop="16dp" />
 
         <Button
-            android:id="@+id/btnRecordatorio"
+            android:id="@+id/btnAgregar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Configurar recordatorio"
+            android:text="@string/btnAgregar"
             android:layout_marginTop="8dp" />
 
         <View
@@ -102,10 +99,16 @@
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txtSinopsis"
+            android:textSize="25sp"
+            android:paddingTop="16dp" />
+
+        <TextView
             android:id="@+id/tvDescripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descripción de la película..."
             android:textSize="16sp"
             android:paddingTop="16dp" />
 
