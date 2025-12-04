@@ -1,22 +1,28 @@
+package Conection
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.screentime.models.Pelicula
-import java.util.Date
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "screenTime.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         const val TABLE_PELICULA = "pelicula"
         const val TABLE_RESENYA = "resenya"
         const val TABLE_USUARIO = "usuario"
         const val TABLE_RECORDATORIO = "recordatorio"
         const val TABLE_PELICULAUSUARIO = "peliculausuario"
+    }
+
+    override fun onConfigure(db: SQLiteDatabase) {
+        super.onConfigure(db)
+        db.setForeignKeyConstraintsEnabled(true)
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -28,23 +34,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 genero TEXT,
                 nombre TEXT,
                 sinopsis TEXT,
-                emitida BOOLEAN DEFAULT 0
+                emitida INTEGER DEFAULT 0,
+                foto TEXT
             )
         """
         db.execSQL(createPelicula)
-
-        // Crear tabla resenya
-        val createResenya = """
-            CREATE TABLE $TABLE_RESENYA (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                descripcion TEXT,
-                calificacion INTEGER,
-                fecha TEXT,
-                id_pelicula INTEGER,
-                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id)
-            )
-        """
-        db.execSQL(createResenya)
 
         // Crear tabla usuario
         val createUsuario = """
@@ -54,12 +48,25 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 descripcion TEXT,
                 contraseña TEXT,
                 email TEXT,
-                fotoperfil TEXT,
-                id_resenya INTEGER,
-                FOREIGN KEY (id_resenya) REFERENCES $TABLE_RESENYA(id)
+                fotoperfil TEXT
             )
         """
         db.execSQL(createUsuario)
+
+        // Crear tabla resenya
+        val createResenya = """
+            CREATE TABLE $TABLE_RESENYA (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                descripcion TEXT,
+                calificacion INTEGER,
+                fecha TEXT,
+                id_pelicula INTEGER,
+                id_usuario INTEGER,
+                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id),
+                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id)
+            )
+        """
+        db.execSQL(createResenya)
 
         // Crear tabla recordatorio
         val createRecordatorio = """
@@ -92,13 +99,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PELICULAUSUARIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RECORDATORIO")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENYA")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PELICULA")
         onCreate(db)
     }
 
-    fun insertPelicula(nombre: String, genero: String?, fechasalida: String?, sinopsis: String?, emitida: Boolean): Long {
+    fun insertPelicula(nombre: String, genero: String?, fechasalida: String?, sinopsis: String?, emitida: Boolean,foto: String): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("nombre", nombre)
@@ -106,22 +113,24 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("fechasalida", fechasalida)
             put("sinopsis", sinopsis)
             put("emitida", if (emitida) 1 else 0)
+            put("foto",foto)
         }
         return db.insert(TABLE_PELICULA, null, values)
     }
 
     fun getPeliculaById(id: Int): Pelicula? {
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM pelicula WHERE id = ?", arrayOf(id.toString()))
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_PELICULA WHERE id = ?", arrayOf(id.toString()))
 
         return if (cursor.moveToFirst()) {
             val pelicula = Pelicula(
                 id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
                 genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
-                fechasalida = cursor.getLong(cursor.getColumnIndexOrThrow("fechasalida")),
+                fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
                 sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
-                emitida = cursor.getInt(cursor.getColumnIndexOrThrow("emitida")) == 1
+                emitida = cursor.getInt(cursor.getColumnIndexOrThrow("emitida")) == 1,
+                foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
             )
             cursor.close()
             pelicula
@@ -144,7 +153,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         genero: String?,
         fechasalida: String?,
         sinopsis: String?,
-        emitida: Boolean
+        emitida: Boolean,
+        foto: String
     ): Int {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -153,6 +163,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("fechasalida", fechasalida)
             put("sinopsis", sinopsis)
             put("emitida", if (emitida) 1 else 0)
+            put("foto", foto)
         }
         return db.update(TABLE_PELICULA, values, "id = ?", arrayOf(id.toString()))
     }
@@ -166,7 +177,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         descripcion: String,
         calificacion: Int,
         fecha: String,
-        id_pelicula: Int
+        id_pelicula: Int,
+        id_usuario: Int
     ): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -174,10 +186,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("calificacion", calificacion)
             put("fecha", fecha)
             put("id_pelicula", id_pelicula)
+            put("id_usuario", id_usuario)
         }
         return db.insert(TABLE_RESENYA, null, values)
     }
-    fun getAllResenyasfun(): Cursor {
+    fun getAllResenyas(): Cursor {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM $TABLE_RESENYA", null)
     }
@@ -186,7 +199,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         descripcion: String,
         calificacion: Int,
         fecha: String,
-        id_pelicula: Int
+        id_pelicula: Int,
+        id_usuario: Int
     ): Int {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -194,6 +208,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("calificacion",calificacion)
             put("fecha",fecha)
             put("id_pelicula",id_pelicula)
+            put("id_usuario", id_usuario)
         }
         return db.update(TABLE_RESENYA, values, "id = ?", arrayOf(id.toString()))
     }
@@ -206,8 +221,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         descripcion: String?,
         contraseña: String?,
         email: String?,
-        fotoperfil: String?,
-        id_resenya: Int?
+        fotoperfil: String?
     ): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -216,7 +230,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("contraseña", contraseña)
             put("email", email)
             put("fotoperfil", fotoperfil)
-            if (id_resenya != null) put("id_resenya", id_resenya)
         }
         return db.insert(TABLE_USUARIO, null, values)
     }
@@ -232,8 +245,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         descripcion: String?,
         contraseña: String?,
         email: String?,
-        fotoperfil: String?,
-        id_resenya: Int?
+        fotoperfil: String?
     ): Int {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -242,7 +254,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("contraseña", contraseña)
             put("email", email)
             put("fotoperfil", fotoperfil)
-            if (id_resenya != null) put("id_resenya", id_resenya)
         }
         return db.update(TABLE_USUARIO, values, "id = ?", arrayOf(id.toString()))
     }
@@ -255,7 +266,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun insertRecordatorio(
         nombre: String,
         descripcion: String?,
-        fecha: Date,
+        fecha: String,
         id_pelicula: Int?,
         id_usuario: Int?
     ): Long {
@@ -263,7 +274,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val values = ContentValues().apply {
             put("nombre", nombre)
             put("descripcion", descripcion)
-            put("fecha", fecha.time)
+            put("fecha", fecha)
             if (id_pelicula != null) put("id_pelicula", id_pelicula)
             if (id_usuario != null) put("id_usuario", id_usuario)
         }

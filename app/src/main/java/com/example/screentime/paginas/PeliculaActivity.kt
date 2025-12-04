@@ -1,6 +1,6 @@
 package com.example.screentime.paginas
 
-import DBHelper
+import Conection.DBHelper
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -47,9 +47,10 @@ class PeliculaActivity : AppCompatActivity() {
         val chipViendo = findViewById<Chip>(R.id.chipViendo)
         val chipVista = findViewById<Chip>(R.id.chipVista)
 
-        val year = if (pelicula.fechasalida != null) {
-            val date = Date(pelicula.fechasalida)
-            SimpleDateFormat("yyyy", Locale.getDefault()).format(date)
+        val year = if (!pelicula.fechasalida.isNullOrEmpty()) {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date = sdf.parse(pelicula.fechasalida)
+            SimpleDateFormat("yyyy", Locale.getDefault()).format(date!!)
         } else "¿?"
 
         tvInfo.text = "$year · ${pelicula.genero ?: "Sin género"}"

@@ -14,6 +14,7 @@
     <string name="tab1">Pendientes</string>
     <string name="tab2">Viendo</string>
     <string name="tab3">Vistas</string>
+    <string name="portada_pelicula">Portada de la película</string>
 
 
 </resources>
