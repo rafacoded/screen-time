@@ -150,7 +150,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                        fechasalida: String?,
                        sinopsis: String?,
                        emitida: Boolean,
-                       estado: String?,
                        foto: String?): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -160,7 +159,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("sinopsis", sinopsis)
             put("emitida", if (emitida) 1 else 0)
             put("foto",foto)
-            put("estado", estado)
         }
         return db.insert(TABLE_PELICULA, null, values)
     }
@@ -176,8 +174,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
                 fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
                 sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
-                estado = cursor.getString(cursor.getColumnIndexOrThrow("estado")),
-                emitida = cursor.getInt(cursor.getColumnIndexOrThrow("emitida")) == 1,
                 foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
             )
             cursor.close()
@@ -404,7 +400,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             fechasalida = "2014-11-07",
             sinopsis = "Un grupo de astronautas viaja a través de un agujero de gusano en busca de un nuevo hogar para la humanidad.",
             emitida = true,
-            estado = "vista",
             foto = "https://img.europapress.es/fotoweb/fotonoticia_20140507113341_1200.jpg"
         )
 
@@ -414,7 +409,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             fechasalida = "2021-12-17",
             sinopsis = "Peter Parker enfrenta las consecuencias de que el mundo conozca su identidad y abre las puertas del multiverso.",
             emitida = true,
-            estado = "vista",
             foto = "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/d/df/Spider-Man_No_Way_Home_Poster.png/revision/latest?cb=20211201150655&path-prefix=es"
         )
 
@@ -434,8 +428,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                     genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
                     fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
                     sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
-                    emitida = cursor.getInt(cursor.getColumnIndexOrThrow("emitida")) == 1,
-                    estado = cursor.getString(cursor.getColumnIndexOrThrow("estado")),
                     foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
                 )
                 lista.add(pelicula)

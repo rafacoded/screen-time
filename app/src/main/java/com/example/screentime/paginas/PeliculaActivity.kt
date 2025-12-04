@@ -54,10 +54,10 @@ class PeliculaActivity : AppCompatActivity() {
 
         tvInfo.text = "$year · ${pelicula.genero ?: "Sin género"}"
 
-        when (pelicula.emitida) {
-            false -> chipPendiente.isChecked = true
-            true -> chipVista.isChecked = true
-        }
+//        when (pelicula.emitida) {
+//            false -> chipPendiente.isChecked = true
+//            true -> chipVista.isChecked = true
+//        }
 
     }
 }

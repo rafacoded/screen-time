@@ -38,16 +38,16 @@ class PeliculaAdapter(
         holder.titulo.text = pelicula.nombre
         holder.chipGenero.text = pelicula.genero ?: "-"
 
-        when (pelicula.estado) {
-            "pendiente" -> {
-                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSecondary)
-                holder.chipEstado.text = R.string.chipEstadoP.toString()
-            }
-            "vista"     -> {
-                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSuccess)
-                holder.chipEstado.text = R.string.chipEstadoV.toString()
-            }
-        }
+//        when (pelicula.estado) {
+//            "pendiente" -> {
+//                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSecondary)
+//                holder.chipEstado.text = R.string.chipEstadoP.toString()
+//            }
+//            "vista"     -> {
+//                holder.chipEstado.setChipBackgroundColorResource(R.color.colorSuccess)
+//                holder.chipEstado.text = R.string.chipEstadoV.toString()
+//            }
+//        }
 
         Glide.with(holder.itemView.context)
             .load(pelicula.foto)
