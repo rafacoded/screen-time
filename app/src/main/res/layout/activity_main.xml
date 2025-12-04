@@ -11,23 +11,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="0dp">
 
-    <TextView
-        android:id="@+id/tvInicio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pulsa para acceder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/btnAcceder"
+            android:layout_width="186dp"
+            android:layout_height="70dp"
+            android:textSize="20sp"
+            android:text="Iniciar Sesión" />
 
-    <Button
-        android:id="@+id/btnAcceder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Entrar" />
+        <TextView
+            android:id="@+id/tvInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿No tienes cuenta?"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:layout_width="186dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Registrarse"
+            android:textColor="#0000FF"
+            android:textSize="15sp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

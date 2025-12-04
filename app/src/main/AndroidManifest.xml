@@ -20,8 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".paginas.LoginActivity"
+            android:exported="false">
+        </activity>
 
         <activity android:name=".paginas.HomeActivity"/>
+        <activity android:name=".paginas.PeliculaActivity"/>
 
     </application>
 

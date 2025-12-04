@@ -46,7 +46,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT,
                 descripcion TEXT,
-                contraseña TEXT,
+                contrasenya TEXT,
                 email TEXT,
                 fotoperfil TEXT
             )
@@ -219,7 +219,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun insertUsuario(
         nombre: String,
         descripcion: String?,
-        contraseña: String?,
+        contrasenya: String?,
         email: String?,
         fotoperfil: String?
     ): Long {
@@ -227,7 +227,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val values = ContentValues().apply {
             put("nombre", nombre)
             put("descripcion", descripcion)
-            put("contraseña", contraseña)
+            put("contrasenya", contrasenya)
             put("email", email)
             put("fotoperfil", fotoperfil)
         }
@@ -243,7 +243,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         id: Int,
         nombre: String,
         descripcion: String?,
-        contraseña: String?,
+        contrasenya: String?,
         email: String?,
         fotoperfil: String?
     ): Int {
@@ -251,7 +251,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val values = ContentValues().apply {
             put("nombre", nombre)
             put("descripcion", descripcion)
-            put("contraseña", contraseña)
+            put("contrasenya", contrasenya)
             put("email", email)
             put("fotoperfil", fotoperfil)
         }
