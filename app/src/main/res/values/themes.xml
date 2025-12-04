@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Tu tema base de la aplicación (probablemente NoActionBar) -->
     <style name="Base.Theme.ScreenTime" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- ... tus personalizaciones ... -->
     </style>
 
-    <style name="Theme.ScreenTime" parent="Base.Theme.ScreenTime" />
+    <!-- ✅ AÑADE ESTE NUEVO TEMA -->
+    <style name="Theme.ScreenTime.ConAppBar" parent="Theme.Material3.DayNight">
+        <!-- Puedes añadir personalizaciones específicas aquí si quieres -->
+    </style>
+    <style name="Theme.ScreenTime" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Aquí puedes personalizar colores primarios, secundarios, etc. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+    <style name="Theme.ScreenTime.NoActionBar" parent="Theme.ScreenTime" />
 </resources>

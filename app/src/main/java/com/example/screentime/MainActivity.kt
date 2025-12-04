@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         botonAcceso.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
 
     }

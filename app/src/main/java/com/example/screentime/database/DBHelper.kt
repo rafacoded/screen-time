@@ -10,9 +10,10 @@ import com.example.screentime.models.Pelicula
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "screenTime.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "screentime.db"
+        private const val DATABASE_VERSION = 1 // Si cambias el schema, incrementa este número.
 
+        // Nombres de las tablas para evitar errores de tipeo
         const val TABLE_PELICULA = "pelicula"
         const val TABLE_RESENYA = "resenya"
         const val TABLE_USUARIO = "usuario"
@@ -20,127 +21,113 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         const val TABLE_PELICULAUSUARIO = "peliculausuario"
     }
 
+    /**
+     * Se llama justo después de crear la conexión a la BD, pero antes de crear el schema.
+     * Es el lugar ideal para habilitar características como las foreign keys.
+     */
     override fun onConfigure(db: SQLiteDatabase) {
         super.onConfigure(db)
         db.setForeignKeyConstraintsEnabled(true)
     }
 
+    /**
+     * Se ejecuta UNA SOLA VEZ en la vida de la app: cuando el fichero de la BD
+     * no existe y necesita ser creado en el móvil.
+     * Aquí se define toda la estructura de tablas y se insertan los datos iniciales.
+     */
     override fun onCreate(db: SQLiteDatabase) {
-        // Crear tabla pelicula
-        val createPelicula = """
-            CREATE TABLE $TABLE_PELICULA (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                fechasalida TEXT,
-                genero TEXT,
-                nombre TEXT,
-                sinopsis TEXT,
-                emitida INTEGER DEFAULT 0,
-                estado TEXT,
-                foto TEXT
-            )
-        """
-        db.execSQL(createPelicula)
+        // --- CREACIÓN DE TABLAS ---
+        // Se crean primero las tablas que NO tienen claves foráneas (FOREIGN KEYs).
 
-        // Insertar datos demo
-        db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, emitida, estado, foto)
-            VALUES ('2014-11-07', 'Ciencia ficción', 'Interstellar', 
-            'Un grupo de astronautas viaja a través...', 1, 'vista',
-            'https://cartelera.laverdad.es/img/carteles/2014/11/interestellar__310x443.jpg')
-        """)
-
-        db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, emitida, estado, foto)
-            VALUES ('2021-12-17', 'Acción', 'Spider-Man: No Way Home',
-            'Peter Parker abre puertas del multiverso...', 1, 'pendiente',
-            'https://pics.filmaffinity.com/Spider_Man_No_Way_Home-387287198-large.jpg')
-        """)
-
-        db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, emitida, estado, foto)
-            VALUES ('2022-03-04', 'Acción', 'The Batman',
-            'Batman investiga una serie de crímenes cometidos por Enigma, revelando corrupción en Gotham.', 1, 'vista',
-            'https://m.media-amazon.com/images/I/61xG1mnV7aL._AC_UF1000,1000_QL80_.jpg')
-        """)
-
-        db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, emitida, estado, foto)
-            VALUES ('2001-12-19', 'Fantasía', 'El Señor de los Anillos: La Comunidad del Anillo',
-            'Frodo inicia su viaje para destruir el Anillo Único con la ayuda de la Comunidad del Anillo.', 1, 'pendiente',
-            'https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p28828_p_v8_ao.jpg')
-        """)
-
-        db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, emitida, estado, foto)
-            VALUES ('2016-12-09', 'Musical', 'La La Land',
-            'Una actriz y un músico intentan cumplir sus sueños en Los Ángeles mientras luchan con su relación.', 1, 'vista',
-            'https://images.store.sky.com/api/img/asset/en/66D8BB8A-E4E8-4422-9242-603110084545_5A41DEE1-191E-4086-95D4-509F4614DE01_2025-4-23-T11-33-16.jpg?s=260x371')
-        """)
-
-        // Crear tabla resenya
-        val createResenya = """
-            CREATE TABLE $TABLE_RESENYA (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                descripcion TEXT,
-                calificacion INTEGER,
-                fecha TEXT,
-                id_pelicula INTEGER,
-                id_usuario INTEGER,
-                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id),
-                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id)
-            )
-        """
-        db.execSQL(createResenya)
-
-        // Crear tabla usuario
-        val createUsuario = """
+        val createUsuarioTable = """
             CREATE TABLE $TABLE_USUARIO (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT,
-                descripcion TEXT,
-                contraseña TEXT,
-                email TEXT,
-                fotoperfil TEXT,
-                id_resenya INTEGER,
-                FOREIGN KEY (id_resenya) REFERENCES $TABLE_RESENYA(id)
-            )
-        """.trimIndent()
-        db.execSQL(createUsuario)
-
-        // Crear tabla recordatorio
-        val createRecordatorio = """
-            CREATE TABLE $TABLE_RECORDATORIO (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT,
-                descripcion TEXT,
-                fecha TEXT,
-                id_pelicula INTEGER,
-                id_usuario INTEGER,
-                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id),
-                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id)
+                nombre VARCHAR(60),
+                descripcion VARCHAR(500),
+                contrasenya VARCHAR(50),
+                email VARCHAR(100) UNIQUE,
+                fotoperfil VARCHAR(256)
             )
         """
-        db.execSQL(createRecordatorio)
+        db.execSQL(createUsuarioTable)
 
-        // Crear tabla peliculausuario
-        val createPeliculaUsuario = """
+        val createPeliculaTable = """
+            CREATE TABLE $TABLE_PELICULA (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                fechasalida VARCHAR(50),
+                genero VARCHAR(30),
+                nombre VARCHAR(60),
+                sinopsis VARCHAR(500),
+                foto VARCHAR(255)
+            )
+        """
+        db.execSQL(createPeliculaTable)
+
+        // Ahora se crean las tablas que SÍ dependen de las anteriores.
+
+        val createResenyaTable = """
+            CREATE TABLE $TABLE_RESENYA (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                descripcion VARCHAR(500),
+                calificacion INTEGER,
+                fecha VARCHAR(50),
+                id_pelicula INTEGER,
+                id_usuario INTEGER,
+                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id) ON DELETE CASCADE,
+                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id) ON DELETE CASCADE
+            )
+        """
+        db.execSQL(createResenyaTable)
+
+        val createRecordatorioTable = """
+            CREATE TABLE $TABLE_RECORDATORIO (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre VARCHAR(60),
+                descripcion VARCHAR(300),
+                fecha VARCHAR(50),
+                id_pelicula INTEGER,
+                id_usuario INTEGER,
+                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id) ON DELETE CASCADE,
+                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id) ON DELETE CASCADE
+            )
+        """
+        db.execSQL(createRecordatorioTable)
+
+        val createPeliculaUsuarioTable = """
             CREATE TABLE $TABLE_PELICULAUSUARIO (
                 id_pelicula INTEGER,
                 id_usuario INTEGER,
                 PRIMARY KEY (id_pelicula, id_usuario),
-                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id),
-                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id)
+                FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id) ON DELETE CASCADE,
+                FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id) ON DELETE CASCADE
             )
         """
-        db.execSQL(createPeliculaUsuario)
+        db.execSQL(createPeliculaUsuarioTable)
+
+        // --- INSERCIÓN DE DATOS INICIALES ---
+        // ¡Crucial para que el Login funcione desde el principio!
+        db.execSQL("""
+            INSERT INTO $TABLE_USUARIO (nombre, email, contrasenya) VALUES
+            ('Jaime', 'jfuertesgarcia@safareyes.es', '123456789'),
+            ('Rafael', 'rtiradoheras@safareyes.es', 'abcdefghijk');
+        """)
     }
 
+    /**
+     * Se ejecuta cuando el número de DATABASE_VERSION en el código es MAYOR
+     * que el número de versión de la BD instalada en el móvil.
+     * Ideal para modificar la estructura de tablas sin que los usuarios pierdan sus datos.
+     * Para desarrollo, la forma más simple es borrar todo y crearlo de nuevo.
+     */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        // Borra las tablas en orden inverso a la creación para evitar problemas de dependencias.
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PELICULAUSUARIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RECORDATORIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_RESENYA")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PELICULA")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIO")
+
+        // Vuelve a llamar a onCreate para reconstruir la base de datos con la nueva estructura.
         onCreate(db)
     }
     // --------------------- PELICULA ---------------------
