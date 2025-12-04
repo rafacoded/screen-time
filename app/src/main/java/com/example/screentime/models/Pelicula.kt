@@ -2,7 +2,7 @@ package com.example.screentime.models
 
 data class Pelicula(
     val id: Int,
-    val titulo: String,
+    val nombre: String,
     val genero: String?,
     val fechasalida: String?,
     val sinopsis: String?,
