@@ -18,10 +18,17 @@ class MainActivity : AppCompatActivity() {
 
         val botonAcceso = findViewById<Button>(R.id.btnAcceder)
 
+        val botonRegister = findViewById<Button>(R.id.btnRegistrar)
+
         botonAcceso.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+
+        botonRegister.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+        }
+
 
     }
 }

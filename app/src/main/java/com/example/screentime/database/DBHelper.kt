@@ -5,10 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.screentime.models.Pelicula
-import java.time.LocalDate
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -49,6 +46,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 fechasalida VARCHAR(50),
                 genero VARCHAR(30),
                 nombre VARCHAR(60),
+                estado VARCHAR(20),
                 sinopsis VARCHAR(500),
                 foto VARCHAR(255)
             )
@@ -71,21 +69,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             )
         """
         db.execSQL(createResenyaTable)
-
-        // Crear tabla usuario
-        val createUsuario = """
-            CREATE TABLE $TABLE_USUARIO (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre VARCHAR(60),
-                descripcion VARCHAR(300),
-                contraseña VARCHAR(60),
-                email VARCHAR(100),
-                fotoperfil VARCHAR(255),
-                id_resenya INTEGER,
-                FOREIGN KEY (id_resenya) REFERENCES $TABLE_RESENYA(id)
-            )
-        """.trimIndent()
-        db.execSQL(createUsuario)
 
         val createRecordatorioTable = """
             CREATE TABLE $TABLE_RECORDATORIO (
@@ -119,6 +102,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             ('Jaime', 'jfuertesgarcia@safareyes.es', '123456789'),
             ('Rafael', 'rtiradoheras@safareyes.es', 'abcdefghijk');
         """)
+
     }
 
     /**
