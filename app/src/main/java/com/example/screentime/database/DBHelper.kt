@@ -5,10 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.screentime.models.Pelicula
-import java.time.LocalDate
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -169,6 +166,22 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun getPeliculasVistas(): List<Pelicula> {
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM pelicula WHERE estado = 'vista'", null)
+        return cursorToList(cursor)
+    }
+
+    fun getPeliculasUsuarioPorEstado(idUsuario: Int, estado: String): List<Pelicula> {
+        val db = readableDatabase
+
+        val cursor = db.rawQuery(
+            """
+        SELECT p.*
+        FROM pelicula p
+        JOIN peliculausuario pu ON p.id = pu.id_pelicula
+        WHERE pu.id_usuario = ? AND pu.estado = ?
+        """.trimIndent(),
+            arrayOf(idUsuario.toString(), estado)
+        )
+
         return cursorToList(cursor)
     }
 

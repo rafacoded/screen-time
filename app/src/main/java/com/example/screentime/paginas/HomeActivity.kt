@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.screentime.R
 import com.example.screentime.fragments.BuscarFragment
@@ -16,7 +15,6 @@ import com.example.screentime.fragments.HomeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
 
 
 class HomeActivity : AppCompatActivity() {
@@ -28,6 +26,9 @@ class HomeActivity : AppCompatActivity() {
 
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
+
+//        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+//        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navigationView)
