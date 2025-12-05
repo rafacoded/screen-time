@@ -5,16 +5,13 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.screentime.models.Pelicula
-import java.time.LocalDate
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "screenTime.db"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
         const val TABLE_PELICULA = "pelicula"
         const val TABLE_RESENYA = "resenya"
         const val TABLE_USUARIO = "usuario"
@@ -50,6 +47,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 genero VARCHAR(30),
                 nombre VARCHAR(60),
                 sinopsis VARCHAR(500),
+                estado VARCHAR(20),
                 foto VARCHAR(255)
             )
         """
@@ -73,19 +71,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.execSQL(createResenyaTable)
 
         // Crear tabla usuario
-        val createUsuario = """
-            CREATE TABLE $TABLE_USUARIO (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre VARCHAR(60),
-                descripcion VARCHAR(300),
-                contraseña VARCHAR(60),
-                email VARCHAR(100),
-                fotoperfil VARCHAR(255),
-                id_resenya INTEGER,
-                FOREIGN KEY (id_resenya) REFERENCES $TABLE_RESENYA(id)
-            )
-        """.trimIndent()
-        db.execSQL(createUsuario)
 
         val createRecordatorioTable = """
             CREATE TABLE $TABLE_RECORDATORIO (
