@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
 
                 val intent = Intent(this, HomeActivity::class.java).apply {
                     putExtra("userId", userId)
-                    putExtra("userName", userNombre)
+                    putExtra("userNombre", userNombre)
                     putExtra("userEmail", userEmail)
                     putExtra("userDesc", userDesc)
                     putExtra("userFoto", userFoto)
