@@ -165,6 +165,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return db.rawQuery("SELECT * FROM $TABLE_PELICULA", null)
     }
 
+    fun getAllPeliculasList(): List<Pelicula> {
+        val cursor = readableDatabase.rawQuery("SELECT * FROM pelicula", null)
+        return cursorToList(cursor)
+    }
+
     fun updatePelicula(
         id: Int,
         nombre: String,

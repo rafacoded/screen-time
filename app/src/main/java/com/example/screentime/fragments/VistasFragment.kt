@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screentime.R
+import com.example.screentime.adapters.PeliculaAdapter
 import com.example.screentime.paginas.PeliculaActivity
 import kotlin.jvm.java
 

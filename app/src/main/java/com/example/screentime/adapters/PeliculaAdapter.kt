@@ -1,4 +1,4 @@
-package com.example.screentime.fragments
+package com.example.screentime.adapters
 
 import android.view.LayoutInflater
 import android.view.View

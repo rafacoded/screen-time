@@ -1,7 +1,9 @@
-package com.example.screentime.fragments
+package com.example.screentime.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.screentime.fragments.PendientesFragment
+import com.example.screentime.fragments.VistasFragment
 
 class HomePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
