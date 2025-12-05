@@ -12,7 +12,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
     companion object {
         private const val DATABASE_NAME = "screenTime.db"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
         const val TABLE_PELICULA = "pelicula"
         const val TABLE_RESENYA = "resenya"
         const val TABLE_USUARIO = "usuario"
@@ -36,7 +36,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 descripcion VARCHAR(500),
                 contrasenya VARCHAR(50),
                 email VARCHAR(100) UNIQUE,
-                fotoperfil VARCHAR(256)
+                fotoperfil BLOB
             )
         """
         db.execSQL(createUsuarioTable)
@@ -294,7 +294,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         descripcion: String?,
         contrasenya: String?,
         email: String?,
-        fotoperfil: String?
+        fotoperfil: ByteArray?
     ): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {

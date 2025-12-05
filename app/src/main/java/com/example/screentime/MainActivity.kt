@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.screentime.paginas.HomeActivity
+import com.example.screentime.paginas.RegistrarActivity
 import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         botonRegister.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, RegistrarActivity::class.java))
         }
 
 
