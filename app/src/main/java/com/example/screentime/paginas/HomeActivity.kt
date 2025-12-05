@@ -1,24 +1,18 @@
 package com.example.screentime.paginas
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.screentime.R
 import com.example.screentime.fragments.BuscarFragment
 import com.example.screentime.fragments.CalendarioFragment
 import com.example.screentime.fragments.HomeFragment
-import com.example.screentime.utils.MyPagerAdapter
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+
 
 class HomeActivity : AppCompatActivity() {
 
