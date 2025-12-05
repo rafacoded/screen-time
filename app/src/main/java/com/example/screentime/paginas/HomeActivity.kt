@@ -27,6 +27,9 @@ class HomeActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
+//        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+//        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navigationView)
 
