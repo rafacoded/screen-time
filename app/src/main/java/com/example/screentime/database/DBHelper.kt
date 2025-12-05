@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.screentime.models.Pelicula
+import com.example.screentime.models.PeliculaConEstado
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -46,7 +47,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 fechasalida VARCHAR(50),
                 genero VARCHAR(30),
                 nombre VARCHAR(60),
-                estado VARCHAR(20),
                 sinopsis VARCHAR(500),
                 foto VARCHAR(255)
             )
@@ -90,12 +90,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             CREATE TABLE $TABLE_PELICULAUSUARIO (
                 id_pelicula INTEGER,
                 id_usuario INTEGER,
+                estado VARCHAR(20),
                 PRIMARY KEY (id_pelicula, id_usuario),
                 FOREIGN KEY (id_pelicula) REFERENCES $TABLE_PELICULA(id) ON DELETE CASCADE,
                 FOREIGN KEY (id_usuario) REFERENCES $TABLE_USUARIO(id) ON DELETE CASCADE
             )
         """
         db.execSQL(createPeliculaUsuarioTable)
+
+        insertarPeliculaUsuarioDemo(db)
 
         // --- INSERCIÓN DE DATOS INICIALES ---
         // ¡Crucial para que el Login funcione desde el principio!
@@ -121,7 +124,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                        genero: String?,
                        fechasalida: String?,
                        sinopsis: String?,
-                       estado: String?,
                        foto: String?): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -129,7 +131,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("genero", genero)
             put("fechasalida", fechasalida)
             put("sinopsis", sinopsis)
-            put("estado", estado)
             put("foto",foto)
         }
         return db.insert(TABLE_PELICULA, null, values)
@@ -146,7 +147,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
                 fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
                 sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
-                estado = cursor.getString(cursor.getColumnIndexOrThrow("estado")),
                 foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
             )
             cursor.close()
@@ -157,19 +157,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         }
     }
 
-    fun getPeliculasPendientes(): List<Pelicula> {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM pelicula WHERE estado = 'pendiente'", null)
-        return cursorToList(cursor)
-    }
-
-    fun getPeliculasVistas(): List<Pelicula> {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM pelicula WHERE estado = 'vista'", null)
-        return cursorToList(cursor)
-    }
-
-    fun getPeliculasUsuarioPorEstado(idUsuario: Int, estado: String): List<Pelicula> {
+    fun getPeliculasUsuarioPorEstado(idUsuario: Int, estado: String): List<PeliculaConEstado> {
         val db = readableDatabase
 
         val cursor = db.rawQuery(
@@ -182,8 +170,44 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             arrayOf(idUsuario.toString(), estado)
         )
 
-        return cursorToList(cursor)
+        val lista = mutableListOf<PeliculaConEstado>()
+
+        if (cursor.moveToFirst()) {
+            do {
+                val pelicula = Pelicula(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                    genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
+                    fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
+                    sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
+                    foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
+                )
+
+                val estadoUsuario = cursor.getString(cursor.getColumnIndexOrThrow("estado"))
+
+                lista.add(PeliculaConEstado(pelicula, estadoUsuario))
+
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+
+        return lista
     }
+
+    // PARA PELICULA_DETALLE
+    fun getPeliculasPendientes(idUsuario: Int): List<PeliculaConEstado> {
+        val db = readableDatabase
+        val query = """
+        SELECT p.*, pu.estado
+        FROM pelicula p
+        JOIN peliculausuario pu ON p.id = pu.id_pelicula
+        WHERE pu.id_usuario = ? AND pu.estado = 'pendiente'
+    """
+        val cursor = db.rawQuery(query, arrayOf(idUsuario.toString()))
+        return cursorToPeliculaConEstadoList(cursor)
+    }
+
 
     fun getAllPeliculas(): Cursor {
         val db = this.readableDatabase
@@ -201,7 +225,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         genero: String?,
         fechasalida: String?,
         sinopsis: String?,
-        estado: String?,
         foto: String
     ): Int {
         val db = this.writableDatabase
@@ -210,7 +233,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             put("genero", genero)
             put("fechasalida", fechasalida)
             put("sinopsis", sinopsis)
-            put("estado", estado)
             put("foto", foto)
         }
         return db.update(TABLE_PELICULA, values, "id = ?", arrayOf(id.toString()))
@@ -391,41 +413,82 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         // Insertar datos demo
         db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, estado, foto)
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2014-11-07', 'Ciencia ficción', 'Interstellar', 
-            'Un grupo de astronautas viaja a través...', 'vista',
+            'Un grupo de astronautas viaja a través...',
             'https://mir-s3-cdn-cf.behance.net/project_modules/hd_webp/8d8f28105415493.619ded067937d.jpg')
         """)
 
         db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, estado, foto)
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2021-12-17', 'Acción', 'Spider-Man: No Way Home',
-            'Peter Parker abre puertas del multiverso...', 'pendiente',
+            'Peter Parker abre puertas del multiverso...',
             'https://images-cdn.ubuy.co.in/633b488f75139c0bdc5db98a-rock-poster-tom-holland-spider-man-3-no.jpg')
         """)
 
         db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, estado, foto)
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2022-03-04', 'Acción', 'The Batman',
-            'Batman investiga una serie de crímenes cometidos por Enigma, revelando corrupción en Gotham.', 'vista',
+            'Batman investiga una serie de crímenes cometidos por Enigma, revelando corrupción en Gotham.',
             'https://m.media-amazon.com/images/I/61xG1mnV7aL._AC_UF1000,1000_QL80_.jpg')
         """)
 
         db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, estado, foto)
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2001-12-19', 'Fantasía', 'El Señor de los Anillos: La Comunidad del Anillo',
-            'Frodo inicia su viaje para destruir el Anillo Único con la ayuda de la Comunidad del Anillo.', 'pendiente',
+            'Frodo inicia su viaje para destruir el Anillo Único con la ayuda de la Comunidad del Anillo.',
             'https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p28828_p_v8_ao.jpg')
         """)
 
         db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, estado, foto)
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2016-12-09', 'Musical', 'La La Land',
-            'Una actriz y un músico intentan cumplir sus sueños en Los Ángeles mientras luchan con su relación.', 'vista',
+            'Una actriz y un músico intentan cumplir sus sueños en Los Ángeles mientras luchan con su relación.',
             'https://images.store.sky.com/api/img/asset/en/66D8BB8A-E4E8-4422-9242-603110084545_5A41DEE1-191E-4086-95D4-509F4614DE01_2025-4-23-T11-33-16.jpg?s=260x371')
         """)
 
     }
+
+    fun insertarPeliculaUsuarioDemo(db: SQLiteDatabase) {
+
+        val userId = 1
+
+        val values1 = ContentValues().apply {
+            put("id_pelicula", 1)
+            put("id_usuario", userId)
+            put("estado", "vista")
+        }
+        db.insert(TABLE_PELICULAUSUARIO, null, values1)
+
+        val values2 = ContentValues().apply {
+            put("id_pelicula", 2)
+            put("id_usuario", userId)
+            put("estado", "vista")
+        }
+        db.insert(TABLE_PELICULAUSUARIO, null, values2)
+
+        val values3 = ContentValues().apply {
+            put("id_pelicula", 3)
+            put("id_usuario", userId)
+            put("estado", "pendiente")
+        }
+        db.insert(TABLE_PELICULAUSUARIO, null, values3)
+
+        val values4 = ContentValues().apply {
+            put("id_pelicula", 4)
+            put("id_usuario", userId)
+            put("estado", "pendiente")
+        }
+        db.insert(TABLE_PELICULAUSUARIO, null, values4)
+
+        val values5 = ContentValues().apply {
+            put("id_pelicula", 5)
+            put("id_usuario", userId)
+            put("estado", "vista")
+        }
+        db.insert(TABLE_PELICULAUSUARIO, null, values5)
+    }
+
 
 
     // UTILIDADES
@@ -440,8 +503,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                     genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
                     fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
                     sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
-                    estado = cursor.getString(cursor.getColumnIndexOrThrow("estado")),
-                    foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
+                    foto = cursor.getString(cursor.getColumnIndexOrThrow("foto")),
                 )
                 lista.add(pelicula)
             } while (cursor.moveToNext())
@@ -451,6 +513,33 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return lista
     }
+
+
+    private fun cursorToPeliculaConEstadoList(cursor: Cursor): List<PeliculaConEstado> {
+        val lista = mutableListOf<PeliculaConEstado>()
+
+        if (cursor.moveToFirst()) {
+            do {
+                val pelicula = Pelicula(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                    genero = cursor.getString(cursor.getColumnIndexOrThrow("genero")),
+                    fechasalida = cursor.getString(cursor.getColumnIndexOrThrow("fechasalida")),
+                    sinopsis = cursor.getString(cursor.getColumnIndexOrThrow("sinopsis")),
+                    foto = cursor.getString(cursor.getColumnIndexOrThrow("foto")),
+                )
+
+                val estado = cursor.getString(cursor.getColumnIndexOrThrow("estado"))
+
+                lista.add(PeliculaConEstado(pelicula, estado))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+
+        return lista
+    }
+
 
 
 }

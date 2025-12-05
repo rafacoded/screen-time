@@ -19,6 +19,7 @@ class PendientesFragment : Fragment() {
     private lateinit var db: DBHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PeliculaAdapter
+    private var userId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,13 +29,15 @@ class PendientesFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_pendientes, container, false)
 
+        userId = arguments?.getInt("userId") ?: -1
+
         db = DBHelper(requireContext())
         recyclerView = view.findViewById(R.id.rvPendientes)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val lista = db.getPeliculasPendientes()
-        adapter = PeliculaAdapter(lista) { pelicula ->
-            abrirDetalle(pelicula.id)
+        val lista = db.getPeliculasUsuarioPorEstado(userId, "pendiente")
+        adapter = PeliculaAdapter(lista) { peliculaConEstado ->
+            abrirDetalle(peliculaConEstado.pelicula.id)
         }
 
         recyclerView.adapter = adapter

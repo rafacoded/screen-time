@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             if (contrasenya.length < 8) {
-                Toast.makeText(this, "contraseña muy corta! Mínimo 8 caracteres!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Contraseña muy corta! Mínimo 8 caracteres!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 

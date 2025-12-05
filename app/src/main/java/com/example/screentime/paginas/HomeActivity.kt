@@ -40,6 +40,17 @@ class HomeActivity : AppCompatActivity() {
         val userDesc = intent.getStringExtra("userDesc")
         val userFoto = intent.getStringExtra("userFoto")
 
+        // PASAR DATOS DE USUARIO ENTRE FRAGMENTS PARA CARGAR DATOS PROPIOS DEL USUARIO
+        val fragment = HomeFragment().apply {
+            arguments = Bundle().apply {
+                putInt("userId", userId)
+            }
+        }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+
         val headerView = navView.getHeaderView(0)
         val headerName = headerView.findViewById<TextView>(R.id.headerName)
         val headerImage = headerView.findViewById<ImageView>(R.id.headerImage)

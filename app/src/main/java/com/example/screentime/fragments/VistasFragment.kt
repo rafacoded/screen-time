@@ -21,20 +21,26 @@ class VistasFragment : Fragment() {
     private lateinit var db: DBHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PeliculaAdapter
+    private var userId: Int = -1
+
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.fragment_vistas, container, false)
+
+        userId = arguments?.getInt("userId") ?: -1
 
         db = DBHelper(requireContext())
         recyclerView = view.findViewById(R.id.rvVistas)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val lista = db.getPeliculasVistas()
-
-        adapter = PeliculaAdapter(lista) { pelicula ->
-            abrirDetalle(pelicula.id)
+        val lista = db.getPeliculasUsuarioPorEstado(userId, "vista")
+        adapter = PeliculaAdapter(lista) { peliculaConEstado ->
+            abrirDetalle(peliculaConEstado.pelicula.id)
         }
 
         recyclerView.adapter = adapter

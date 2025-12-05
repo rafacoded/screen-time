@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screentime.R
 import com.example.screentime.models.Pelicula
+import com.example.screentime.models.PeliculaConEstado
 import com.google.android.material.chip.Chip
 
 class PeliculaAdapter(
 
-    val lista: List<Pelicula>,
-    val onClick: (Pelicula) -> Unit
+    val lista: List<PeliculaConEstado>,
+    val onClick: (PeliculaConEstado) -> Unit
 
 ) : RecyclerView.Adapter<PeliculaAdapter.ViewHolder>() {
     inner class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {
@@ -33,12 +34,13 @@ class PeliculaAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val pelicula = lista[position]
+        val item = lista[position]
+        val pelicula = item.pelicula
 
         holder.titulo.text = pelicula.nombre
         holder.chipGenero.text = pelicula.genero ?: "-"
 
-        when (pelicula.estado) {
+        when (item.estado) {
             "pendiente" -> {
                 holder.chipEstado.setChipBackgroundColorResource(R.color.colorSecondary)
                 holder.chipEstado.text = R.string.chipEstadoP.toString()
@@ -47,6 +49,9 @@ class PeliculaAdapter(
                 holder.chipEstado.setChipBackgroundColorResource(R.color.colorSuccess)
                 holder.chipEstado.text = R.string.chipEstadoV.toString()
             }
+            else -> {
+                holder.chipEstado.visibility = View.GONE
+            }
         }
 
         Glide.with(holder.itemView.context)
@@ -54,7 +59,7 @@ class PeliculaAdapter(
             .into(holder.img)
 
         holder.itemView.setOnClickListener {
-            onClick(pelicula)
+            onClick(item)
         }
     }
 
