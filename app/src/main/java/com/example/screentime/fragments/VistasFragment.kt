@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.screentime.R
 import com.example.screentime.adapters.PeliculaAdapter
 import com.example.screentime.paginas.PeliculaActivity
+import com.example.screentime.session.SessionManager
 import kotlin.jvm.java
 
 class VistasFragment : Fragment() {
@@ -21,8 +22,6 @@ class VistasFragment : Fragment() {
     private lateinit var db: DBHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PeliculaAdapter
-    private var userId: Int = -1
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,15 +31,21 @@ class VistasFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_vistas, container, false)
 
-        userId = arguments?.getInt("userId") ?: -1
+        val userId = SessionManager(requireContext()).getUserId()
+
+        if (userId == -1) {
+            Toast.makeText(requireContext(), "Error: usuario no identificado", Toast.LENGTH_SHORT).show()
+        }
 
         db = DBHelper(requireContext())
+
         recyclerView = view.findViewById(R.id.rvVistas)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val lista = db.getPeliculasUsuarioPorEstado(userId, "vista")
-        adapter = PeliculaAdapter(lista) { peliculaConEstado ->
-            abrirDetalle(peliculaConEstado.pelicula.id)
+
+        adapter = PeliculaAdapter(lista) {
+            abrirDetalle(it.pelicula.id)
         }
 
         recyclerView.adapter = adapter
@@ -48,11 +53,22 @@ class VistasFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        refrescarLista()
+    }
+
+    private fun refrescarLista() {
+        val userId = SessionManager(requireContext()).getUserId()
+
+        val nuevaLista = db.getPeliculasUsuarioPorEstado(userId, "vista")
+        adapter.lista = nuevaLista
+        adapter.notifyDataSetChanged()
+    }
+
     private fun abrirDetalle(id: Int) {
         val intent = Intent(requireContext(), PeliculaActivity::class.java)
         intent.putExtra("peliculaId", id)
         startActivity(intent)
     }
-
-
 }

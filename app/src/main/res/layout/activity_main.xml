@@ -15,11 +15,35 @@
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="0dp">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="251dp"
+            android:layout_height="wrap_content"
+            android:text="ScreenTime"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="170dp"
+            android:layout_height="186dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/screentime_logo" />
+
         <Button
             android:id="@+id/btnAcceder"
             android:layout_width="186dp"
             android:layout_height="70dp"
             android:textSize="20sp"
+            android:backgroundTint="@color/screentimeColor"
             android:text="Iniciar Sesión" />
 
         <TextView

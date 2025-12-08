@@ -16,7 +16,6 @@ class RegistrarActivity : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper
     private lateinit var imagenPerfil: CircleImageView
     private var imagenByteArray: ByteArray? = null // Variable para guardar la URI de la imagen seleccionada
-
     private val selectorDeImagen = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             imagenPerfil.setImageURI(it)

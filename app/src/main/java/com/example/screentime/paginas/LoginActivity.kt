@@ -9,6 +9,7 @@ import android.widget.EditText // CAMBIO: Usar EditText para los campos de entra
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.screentime.R
+import com.example.screentime.session.SessionManager
 import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
@@ -21,19 +22,17 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         dbHelper = DBHelper(this)
-        // CAMBIO: Usa EditText, que es el componente correcto para la entrada de texto.
+
         val nombreText = findViewById<EditText>(R.id.NombreText)
         val emailText = findViewById<EditText>(R.id.EmailText)
         val contrasenyaText = findViewById<EditText>(R.id.ContrasenyaText)
         val botonEntrar = findViewById<Button>(R.id.BotonEntrar)
 
         botonEntrar.setOnClickListener {
-            // 1. Obtener y limpiar los datos de entrada.
+
             val nombre = nombreText.text.toString().trim()
             val email = emailText.text.toString().trim()
             val contrasenya = contrasenyaText.text.toString().trim()
-
-            // --- CLÁUSULAS DE GUARDA (VALIDACIONES) ---
 
             if (nombre.isEmpty() || nombre.length > 50) {
                 Toast.makeText(this, "Nombre vacío o muy largo!", Toast.LENGTH_LONG).show()
@@ -58,23 +57,22 @@ class LoginActivity : AppCompatActivity() {
 
             if (cursor.moveToFirst()) {
                 Toast.makeText(this, "Bienvenido $nombre", Toast.LENGTH_LONG).show()
+
                 val userId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
                 val userNombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
                 val userEmail = cursor.getString(cursor.getColumnIndexOrThrow("email"))
                 val userDesc = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
-                val userFoto = cursor.getString(cursor.getColumnIndexOrThrow("fotoperfil"))
 
-                val intent = Intent(this, HomeActivity::class.java).apply {
-                    putExtra("userId", userId)
-                    putExtra("userNombre", userNombre)
-                    putExtra("userEmail", userEmail)
-                    putExtra("userDesc", userDesc)
-                    putExtra("userFoto", userFoto)
-                }
-                startActivity(intent)
+                val session = SessionManager(this)
+
+                session.saveUserId(userId)
+                session.saveUserName(userNombre)
+                session.saveUserEmail(userEmail)
+                session.saveUserDesc(userDesc)
+
+                startActivity(Intent(this, InicioActivity::class.java))
                 finish()
             } else {
-                // Las validaciones de formato fueron correctas, pero el usuario no existe en la BD.
                 Toast.makeText(this, "Usuario o contraseña incorrecta!", Toast.LENGTH_LONG).show()
             }
 

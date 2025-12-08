@@ -14,11 +14,11 @@ import com.example.screentime.R
 import com.example.screentime.models.Pelicula
 import com.example.screentime.utils.esPeliculaEmitida
 
-class BuscarPeliculaAdapter(
+class PeliculaBuscarAdapter(
     private var lista: List<Pelicula>,
     val onAddClick: (Pelicula) -> Unit,
     val onRecordatorioClick: (Pelicula) -> Unit
-) : RecyclerView.Adapter<BuscarPeliculaAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PeliculaBuscarAdapter.ViewHolder>() {
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val img = v.findViewById<ImageView>(R.id.ivCardImagenBuscar)
@@ -26,6 +26,7 @@ class BuscarPeliculaAdapter(
         val genero = v.findViewById<TextView>(R.id.tvCardGeneroBuscar)
         val btnAdd = v.findViewById<Button>(R.id.btnAdd)
         val btnRecordatorio = v.findViewById<Button>(R.id.btnRecordatorio)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

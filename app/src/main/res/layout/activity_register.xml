@@ -19,6 +19,7 @@
         android:layout_width="409dp"
         android:layout_height="304dp"
         android:orientation="vertical"
+        android:gravity="center"
         app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,9 +59,10 @@
 
         <Button
             android:id="@+id/btnRegistrar"
-            android:layout_width="match_parent"
+            android:layout_width="332dp"
             android:layout_height="48dp"
             android:text="Registrarse"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -12,7 +12,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
     companion object {
         private const val DATABASE_NAME = "screenTime.db"
-        private const val DATABASE_VERSION = 4
+        private const val DATABASE_VERSION = 5
         const val TABLE_PELICULA = "pelicula"
         const val TABLE_RESENYA = "resenya"
         const val TABLE_USUARIO = "usuario"
@@ -40,6 +40,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             )
         """
         db.execSQL(createUsuarioTable)
+
+        // --- INSERCIÓN DE DATOS INICIALES ---
+        // ¡Crucial para que el Login funcione desde el principio!
+        db.execSQL("""
+            INSERT INTO $TABLE_USUARIO (nombre, email, contrasenya) VALUES
+            ('Jaime', 'jfuertesgarcia@safareyes.es', '123456789'),
+            ('Rafael', 'rtiradoheras@safareyes.es', 'abcdefghijk');
+        """)
 
         val createPeliculaTable = """
             CREATE TABLE $TABLE_PELICULA (
@@ -99,14 +107,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.execSQL(createPeliculaUsuarioTable)
 
         insertarPeliculaUsuarioDemo(db)
-
-        // --- INSERCIÓN DE DATOS INICIALES ---
-        // ¡Crucial para que el Login funcione desde el principio!
-        db.execSQL("""
-            INSERT INTO $TABLE_USUARIO (nombre, email, contrasenya) VALUES
-            ('Jaime', 'jfuertesgarcia@safareyes.es', '123456789'),
-            ('Rafael', 'rtiradoheras@safareyes.es', 'abcdefghijk');
-        """)
     }
 
     /**
@@ -116,7 +116,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
      * Para desarrollo, la forma más simple es borrar todo y crearlo de nuevo.
      */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // NO HACER DROPS, SINO LOS DATOS NO PERSISTEN AL CERRARLA Y ABRIRLA
+        db.execSQL("DROP TABLE IF EXISTS peliculausuario")
+        db.execSQL("DROP TABLE IF EXISTS pelicula")
+        db.execSQL("DROP TABLE IF EXISTS usuario")
+        db.execSQL("DROP TABLE IF EXISTS resenya")
+        db.execSQL("DROP TABLE IF EXISTS recordatorio")
+        onCreate(db)
     }
     // --------------------- PELICULA ---------------------
 
@@ -162,7 +167,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         val cursor = db.rawQuery(
             """
-        SELECT p.*
+        SELECT p.*, pu.estado
         FROM pelicula p
         JOIN peliculausuario pu ON p.id = pu.id_pelicula
         WHERE pu.id_usuario = ? AND pu.estado = ?
@@ -385,11 +390,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // --------------------- PeliculaUsuario ---------------------
-    fun insertPeliculaUsuario(id_pelicula: Int, id_usuario: Int): Long {
+    fun insertPeliculaUsuario(id_pelicula: Int, id_usuario: Int, estado: String): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("id_pelicula", id_pelicula)
             put("id_usuario", id_usuario)
+            put("estado", estado)
         }
         return db.insert(TABLE_PELICULAUSUARIO, null, values)
     }
@@ -406,6 +412,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             "id_pelicula = ? AND id_usuario = ?",
             arrayOf(id_pelicula.toString(), id_usuario.toString())
         )
+    }
+
+    fun existePeliculaUsuario(idPelicula: Int, idUsuario: Int): Boolean {
+        val c = readableDatabase.rawQuery(
+            "SELECT 1 FROM peliculausuario WHERE id_pelicula = ? AND id_usuario = ?",
+            arrayOf(idPelicula.toString(), idUsuario.toString())
+        )
+        val existe = c.moveToFirst()
+        c.close()
+        return existe
     }
 
     // DATOS DEMO

@@ -44,15 +44,6 @@
 
         </LinearLayout>
 
-        <RatingBar
-            android:id="@+id/rbPuntuacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="0.5"
-            android:isIndicator="true"
-            android:paddingTop="8dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,20 +69,6 @@
             android:background="#DDDDDD"
             android:layout_marginTop="16dp" />
 
-        <Button
-            android:id="@+id/btnReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnReview"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/btnAgregar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnAgregar"
-            android:layout_marginTop="8dp" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -112,6 +89,39 @@
             android:textSize="16sp"
             android:paddingTop="16dp" />
 
+        <Button
+            android:id="@+id/btnReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnReview"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnAgregar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnAgregar"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvTituloResenas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reseñas"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingTop="24dp"/>
+
+        <LinearLayout
+            android:id="@+id/contenedorResenas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp" />
+
+
     </LinearLayout>
+
+
 
 </ScrollView>

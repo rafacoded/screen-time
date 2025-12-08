@@ -14,8 +14,8 @@ import com.google.android.material.chip.Chip
 
 class PeliculaAdapter(
 
-    val lista: List<PeliculaConEstado>,
-    val onClick: (PeliculaConEstado) -> Unit
+    var lista: List<PeliculaConEstado>,
+    val onClick: (PeliculaConEstado) -> Unit,
 
 ) : RecyclerView.Adapter<PeliculaAdapter.ViewHolder>() {
     inner class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {
@@ -39,15 +39,14 @@ class PeliculaAdapter(
 
         holder.titulo.text = pelicula.nombre
         holder.chipGenero.text = pelicula.genero ?: "-"
+        holder.chipEstado.text = item.estado
 
         when (item.estado) {
             "pendiente" -> {
                 holder.chipEstado.setChipBackgroundColorResource(R.color.colorSecondary)
-                holder.chipEstado.text = R.string.chipEstadoP.toString()
             }
-            "vista"     -> {
+            "vista" -> {
                 holder.chipEstado.setChipBackgroundColorResource(R.color.colorSuccess)
-                holder.chipEstado.text = R.string.chipEstadoV.toString()
             }
             else -> {
                 holder.chipEstado.visibility = View.GONE
@@ -58,12 +57,11 @@ class PeliculaAdapter(
             .load(pelicula.foto)
             .into(holder.img)
 
-        holder.itemView.setOnClickListener {
-            onClick(item)
-        }
+        holder.itemView.setOnClickListener { onClick(item) }
     }
 
     override fun getItemCount(): Int {
         return lista.size
     }
+
 }

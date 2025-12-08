@@ -30,7 +30,7 @@
         </activity>
 
         <activity android:name=".paginas.RegistrarActivity"/>
-        <activity android:name=".paginas.HomeActivity"/>
+        <activity android:name=".paginas.InicioActivity"/>
         <activity android:name=".paginas.PeliculaActivity"/>
 
 
