@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.screentime.models.Pelicula
 import com.example.screentime.models.PeliculaConEstado
+import com.example.screentime.models.Recordatorio
+import com.example.screentime.models.Resenya
+import com.example.screentime.models.ResenyaConUsuario
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -288,6 +291,56 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         }
         return db.update(TABLE_RESENYA, values, "id = ?", arrayOf(id.toString()))
     }
+
+    fun getResenyasByPelicula(idPelicula: Int): List<ResenyaConUsuario> {
+        val db = this.readableDatabase
+        val lista = mutableListOf<ResenyaConUsuario>()
+
+        val query = """
+        SELECT r.descripcion, r.calificacion, r.fecha, r.id_usuario,
+               u.nombre, u.fotoperfil
+        FROM $TABLE_RESENYA r
+        JOIN $TABLE_USUARIO u ON r.id_usuario = u.id
+        WHERE r.id_pelicula = ?
+        ORDER BY r.fecha DESC
+    """.trimIndent()
+
+        val cursor = db.rawQuery(query, arrayOf(idPelicula.toString()))
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                do {
+                    val descripcion = it.getString(0)
+                    val calificacion = it.getInt(1)
+                    val fecha = it.getString(2)
+                    val idUsuario = it.getInt(3)
+                    val nombreUsuario = it.getString(4)
+                    val fotoUsuario = it.getString(5) // puede ser null
+
+                    val resenya = Resenya(
+                        descripcion = descripcion,
+                        calificacion = calificacion,
+                        fecha = fecha,
+                        idUsuario = idUsuario,
+                        idPelicula = idPelicula
+                    )
+
+                    lista.add(
+                        ResenyaConUsuario(
+                            resenya = resenya,
+                            nombreUsuario = nombreUsuario,
+                            fotoUsuario = fotoUsuario
+                        )
+                    )
+                } while (it.moveToNext())
+            }
+        }
+
+        return lista
+    }
+
+
+
     fun deleteResenya(id: Int): Int {
         val db = this.writableDatabase
         return db.delete(TABLE_RESENYA, "id = ?", arrayOf(id.toString()))
@@ -360,10 +413,39 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return db.insert(TABLE_RECORDATORIO, null, values)
     }
 
-    fun getAllRecordatorios(): Cursor {
+    fun getRecordatoriosByUsuario(idUsuario: Int): List<Recordatorio> {
+        val lista = mutableListOf<Recordatorio>()
         val db = this.readableDatabase
-        return db.rawQuery("SELECT * FROM $TABLE_RECORDATORIO", null)
+
+        val query = """
+        SELECT id, nombre, descripcion, fecha, id_pelicula, id_usuario
+        FROM $TABLE_RECORDATORIO
+        WHERE id_usuario = ?
+        ORDER BY fecha ASC
+    """
+
+        val cursor = db.rawQuery(query, arrayOf(idUsuario.toString()))
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                do {
+                    val recordatorio = Recordatorio(
+                        id = it.getInt(0),
+                        nombre = it.getString(1),
+                        descripcion = it.getString(2),
+                        fecha = it.getString(3),
+                        idPelicula = it.getInt(4),
+                        idUsuario = it.getInt(5)
+                    )
+                    lista.add(recordatorio)
+                } while (it.moveToNext())
+            }
+        }
+
+        return lista
     }
+
+
 
     fun updateRecordatorio(
         id: Int,
@@ -462,6 +544,42 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             'Una actriz y un músico intentan cumplir sus sueños en Los Ángeles mientras luchan con su relación.',
             'https://images.store.sky.com/api/img/asset/en/66D8BB8A-E4E8-4422-9242-603110084545_5A41DEE1-191E-4086-95D4-509F4614DE01_2025-4-23-T11-33-16.jpg?s=260x371')
         """)
+
+        db.execSQL("""
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
+            VALUES ('2025-12-18', 'Ciencia ficción', 'Duna: Parte III',
+            'Paul Atreides afronta el destino final del Kwisatz Haderach mientras el universo se divide entre rebelión y profecía.',
+            'https://m.media-amazon.com/images/I/81zqfE0Y4TL._AC_UF1000,1000_QL80_.jpg')
+        """)
+
+        db.execSQL("""
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
+            VALUES ('2026-05-15', 'Acción', 'Avengers: Secret Wars',
+            'Los héroes del multiverso se unen en la batalla definitiva que decidirá el destino de todas las realidades.',
+            'https://m.media-amazon.com/images/I/71ADeCaLxOL._AC_UF1000,1000_QL80_.jpg')
+        """)
+
+        db.execSQL("""
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
+            VALUES ('2025-12-19', 'Fantasía', 'Harry Potter y el Crío Maldito',
+            'Harry y su hijo Albus se ven envueltos en una amenaza temporal que podría alterar la historia mágica para siempre.',
+            'https://m.media-amazon.com/images/I/81tA3OgpupL._AC_UF1000,1000_QL80_.jpg')
+        """)
+
+        db.execSQL("""
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
+            VALUES ('2026-03-20', 'Aventura', 'Jurassic World: Rebirth',
+            'Un nuevo experimento genético escapa del control, provocando el renacimiento de una especie letal nunca antes vista.',
+            'https://m.media-amazon.com/images/I/71Wmni3pb-L._AC_UF1000,1000_QL80_.jpg')
+        """)
+
+        db.execSQL("""
+            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
+            VALUES ('2027-11-10', 'Animación', 'Zootopia 3',
+            'Judy Hopps y Nick Wilde enfrentan un nuevo caso que amenaza con dividir a las especies más que nunca.',
+            'https://lumiere-a.akamaihd.net/v1/images/p_zootopia2_disneyplus_v3_65d82806.jpeg')
+        """)
+
 
     }
 

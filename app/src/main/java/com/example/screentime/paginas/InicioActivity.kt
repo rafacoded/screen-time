@@ -49,10 +49,6 @@ class InicioActivity : AppCompatActivity() {
 
         val bottomNavBar = findViewById<BottomNavigationView>(R.id.bottomNav)
 
-//        val userId = intent.getIntExtra("userId", -1)
-//        val userNombre = intent.getStringExtra("userNombre")
-//        val userEmail = intent.getStringExtra("userEmail")
-//        val userDesc = intent.getStringExtra("userDesc")
         val userFoto = intent.getStringExtra("userFoto")
 
         val headerView = navView.getHeaderView(0)
