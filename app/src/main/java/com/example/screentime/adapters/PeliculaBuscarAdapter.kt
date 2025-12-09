@@ -25,7 +25,7 @@ class PeliculaBuscarAdapter(
         val titulo = v.findViewById<TextView>(R.id.tvCardTituloBuscar)
         val genero = v.findViewById<TextView>(R.id.tvCardGeneroBuscar)
         val btnAdd = v.findViewById<Button>(R.id.btnAdd)
-        val btnRecordatorio = v.findViewById<Button>(R.id.btnRecordatorio)
+
 
     }
 
@@ -48,12 +48,7 @@ class PeliculaBuscarAdapter(
 
         holder.btnAdd.setOnClickListener { onAddClick(p) }
 
-        if (!p.esPeliculaEmitida()) {
-            holder.btnRecordatorio.visibility = View.VISIBLE
-            holder.btnRecordatorio.setOnClickListener { onRecordatorioClick(p) }
-        } else {
-            holder.btnRecordatorio.visibility = View.GONE
-        }
+
     }
 
     override fun getItemCount() = lista.size

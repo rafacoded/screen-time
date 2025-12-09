@@ -39,25 +39,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <Button
+                android:id="@+id/btnAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:backgroundTint="@color/screentimeColor"
+                android:text="Añadir" />
 
-                <Button
-                    android:id="@+id/btnAdd"
-                    android:text="Añadir"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/btnRecordatorio"
-                    android:text="Recordatorio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

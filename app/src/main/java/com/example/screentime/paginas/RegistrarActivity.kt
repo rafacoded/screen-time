@@ -32,12 +32,17 @@ class RegistrarActivity : AppCompatActivity() {
 
         imagenPerfil = findViewById(R.id.select_photo_imageview_register)
         imagenPerfil.setOnClickListener {
-            // Abrimos la galería de imágenes del dispositivo
             selectorDeImagen.launch("image/*")
         }
         val nombreEditText = findViewById<EditText>(R.id.NombreReg)
         val emailEditText = findViewById<EditText>(R.id.EmailReg)
         val contrasenyaEditText = findViewById<EditText>(R.id.ContrasenyaReg)
+
+        val botonLog = findViewById<Button>(R.id.btnLog)
+
+        botonLog.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
 
         val botonRegistrar = findViewById<Button>(R.id.btnRegistrar)
         botonRegistrar.setOnClickListener {
@@ -50,7 +55,6 @@ class RegistrarActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Usamos la nueva variable imagenByteArray
             val exito = dbHelper.insertUsuario(nombre, "", contrasenya, email, imagenByteArray)
 
             if (exito != -1L) {

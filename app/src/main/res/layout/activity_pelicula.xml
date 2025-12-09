@@ -93,6 +93,7 @@
             android:id="@+id/btnReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/screentimeColorContrast"
             android:text="@string/btnReview"
             android:layout_marginTop="16dp" />
 
@@ -100,6 +101,7 @@
             android:id="@+id/btnAgregar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/screentimeColor"
             android:text="@string/btnAgregar"
             android:layout_marginTop="8dp" />
 
@@ -107,6 +109,7 @@
             android:id="@+id/btnRecordatorio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/screentimeColor"
             android:text="Crear recordatorio"
             android:layout_marginTop="8dp" />
 

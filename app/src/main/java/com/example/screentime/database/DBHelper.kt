@@ -109,7 +109,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         """
         db.execSQL(createPeliculaUsuarioTable)
 
-        insertarPeliculaUsuarioDemo(db)
     }
 
     /**
@@ -549,81 +548,32 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2025-12-18', 'Ciencia ficción', 'Duna: Parte III',
             'Paul Atreides afronta el destino final del Kwisatz Haderach mientras el universo se divide entre rebelión y profecía.',
-            'https://m.media-amazon.com/images/I/81zqfE0Y4TL._AC_UF1000,1000_QL80_.jpg')
+            'https://images.ottplay.com/webstories/wp-content/uploads/2024/04/Dune-8.jpg')
         """)
 
         db.execSQL("""
             INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2026-05-15', 'Acción', 'Avengers: Secret Wars',
             'Los héroes del multiverso se unen en la batalla definitiva que decidirá el destino de todas las realidades.',
-            'https://m.media-amazon.com/images/I/71ADeCaLxOL._AC_UF1000,1000_QL80_.jpg')
+            'https://m.media-amazon.com/images/M/MV5BYTQyZTQ5MWQtN2M4NC00YWQwLTg3ZTctM2JiZDE4NDBkZDJkXkEyXkFqcGc@._V1_.jpg')
         """)
 
         db.execSQL("""
             INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
-            VALUES ('2025-12-19', 'Fantasía', 'Harry Potter y el Crío Maldito',
+            VALUES ('2025-12-19', 'Fantasía', 'Harry Potter y el Niño Maldito',
             'Harry y su hijo Albus se ven envueltos en una amenaza temporal que podría alterar la historia mágica para siempre.',
-            'https://m.media-amazon.com/images/I/81tA3OgpupL._AC_UF1000,1000_QL80_.jpg')
+            'https://m.media-amazon.com/images/I/91bUfxdDjWL._AC_UF1000,1000_QL80_.jpg')
         """)
 
         db.execSQL("""
             INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
             VALUES ('2026-03-20', 'Aventura', 'Jurassic World: Rebirth',
             'Un nuevo experimento genético escapa del control, provocando el renacimiento de una especie letal nunca antes vista.',
-            'https://m.media-amazon.com/images/I/71Wmni3pb-L._AC_UF1000,1000_QL80_.jpg')
-        """)
-
-        db.execSQL("""
-            INSERT INTO pelicula (fechasalida, genero, nombre, sinopsis, foto)
-            VALUES ('2027-11-10', 'Animación', 'Zootopia 3',
-            'Judy Hopps y Nick Wilde enfrentan un nuevo caso que amenaza con dividir a las especies más que nunca.',
-            'https://lumiere-a.akamaihd.net/v1/images/p_zootopia2_disneyplus_v3_65d82806.jpeg')
+            'https://pics.filmaffinity.com/jurassic_world_rebirth-254962281-mmed.jpg')
         """)
 
 
     }
-
-    fun insertarPeliculaUsuarioDemo(db: SQLiteDatabase) {
-
-        val userId = 1
-
-        val values1 = ContentValues().apply {
-            put("id_pelicula", 1)
-            put("id_usuario", userId)
-            put("estado", "vista")
-        }
-        db.insert(TABLE_PELICULAUSUARIO, null, values1)
-
-        val values2 = ContentValues().apply {
-            put("id_pelicula", 2)
-            put("id_usuario", userId)
-            put("estado", "vista")
-        }
-        db.insert(TABLE_PELICULAUSUARIO, null, values2)
-
-        val values3 = ContentValues().apply {
-            put("id_pelicula", 3)
-            put("id_usuario", userId)
-            put("estado", "pendiente")
-        }
-        db.insert(TABLE_PELICULAUSUARIO, null, values3)
-
-        val values4 = ContentValues().apply {
-            put("id_pelicula", 4)
-            put("id_usuario", userId)
-            put("estado", "pendiente")
-        }
-        db.insert(TABLE_PELICULAUSUARIO, null, values4)
-
-        val values5 = ContentValues().apply {
-            put("id_pelicula", 5)
-            put("id_usuario", userId)
-            put("estado", "vista")
-        }
-        db.insert(TABLE_PELICULAUSUARIO, null, values5)
-    }
-
-
 
     // UTILIDADES
     private fun cursorToList(cursor: Cursor): List<Pelicula> {

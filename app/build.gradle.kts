@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.bumptech.glide:glide:5.0.5")
+    implementation("com.github.mhiew:material-calendarview:2.0.3")
     implementation(libs.androidx.work.runtime.ktx)
 
     testImplementation(libs.junit)

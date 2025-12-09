@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/screentimeColor"
     android:layout_width="match_parent"
     android:layout_height="160dp">
 
     <ImageView
         android:id="@+id/headerImage"
-        android:src="@drawable/ic_papa"
+        android:src="@drawable/ic_user"
         android:layout_width="64dp"
         android:layout_height="64dp"/>
 

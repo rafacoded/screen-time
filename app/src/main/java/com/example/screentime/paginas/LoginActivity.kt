@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText // CAMBIO: Usar EditText para los campos de entrada
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.screentime.MainActivity
 import com.example.screentime.R
 import com.example.screentime.session.SessionManager
 import java.util.regex.Pattern
@@ -27,6 +28,11 @@ class LoginActivity : AppCompatActivity() {
         val emailText = findViewById<EditText>(R.id.EmailText)
         val contrasenyaText = findViewById<EditText>(R.id.ContrasenyaText)
         val botonEntrar = findViewById<Button>(R.id.BotonEntrar)
+        val botonVolverRegistro = findViewById<Button>(R.id.BotonRegistro)
+
+        botonVolverRegistro.setOnClickListener {
+            startActivity(Intent(this, RegistrarActivity::class.java))
+        }
 
         botonEntrar.setOnClickListener {
 

@@ -60,7 +60,12 @@ class PeliculaActivity : AppCompatActivity() {
         val btnReview = findViewById<Button>(R.id.btnReview)
 
         btnReview.setOnClickListener {
-            abrirPopupResena(idPelicula)
+            if (!pelicula.esPeliculaEmitida()) {
+                Toast.makeText(this, "Aún no puedes reseñar esta película", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            abrirPopupResena(pelicula.id)
         }
 
         val btnRecordatorio = findViewById<Button>(R.id.btnRecordatorio)
@@ -154,13 +159,6 @@ class PeliculaActivity : AppCompatActivity() {
             if (resultado > 0) {
                 Toast.makeText(this, "Reseña guardada", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
-            } else {
-                Toast.makeText(this, "Error al guardar reseña", Toast.LENGTH_SHORT).show()
-            }
-
-            if (resultado > 0) {
-                Toast.makeText(this, "Reseña guardada", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
                 cargarResenyas(idPelicula)
             } else {
                 Toast.makeText(this, "Error al guardar reseña", Toast.LENGTH_SHORT).show()
@@ -213,6 +211,7 @@ class PeliculaActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun abrirPopupRecordatorio(pelicula: Pelicula) {
 
         val dialogView = layoutInflater.inflate(R.layout.popup_recordatorio, null)
@@ -247,6 +246,7 @@ class PeliculaActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun abrirDatePickerParaRecordatorio(
         nombre: String,
         descripcion: String?,
@@ -310,18 +310,19 @@ class PeliculaActivity : AppCompatActivity() {
         descripcion: String?,
         fecha: String
     ) {
-//        val localDate = LocalDate.parse(fecha)
-//        val fechaNotificar = localDate.minusDays(1) // 1 día antes
-//
-//        val fechaNotiMillis = fechaNotificar
-//            .atStartOfDay(ZoneId.systemDefault())
-//            .toInstant()
-//            .toEpochMilli()
-//
-//        val ahoraMillis = System.currentTimeMillis()
-//        val delay = fechaNotiMillis - ahoraMillis
+        val localDate = LocalDate.parse(fecha)
+        val fechaNotificar = localDate.minusDays(1) // 1 día antes
 
-        val delay = 10 * 1000L
+        val fechaNotiMillis = fechaNotificar
+            .atStartOfDay(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
+
+        val ahoraMillis = System.currentTimeMillis()
+        val delay = fechaNotiMillis - ahoraMillis
+
+//        val delay = 5 * 60 * 1000L  // Prueba para notificaciones en 5 minutos
+
 
         if (delay <= 0) return
 
