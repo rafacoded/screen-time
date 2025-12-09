@@ -35,8 +35,11 @@
         android:id="@+id/btnGuardarResena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/screentimeColor"
+        android:backgroundTint="@color/screentimeColorContrast"
         android:text="Guardar"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:layout_marginTop="16dp" />
 
 </LinearLayout>

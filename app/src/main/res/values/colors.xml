@@ -1,6 +1,6 @@
 <resources>
     <color name="screentimeColor">#586F7D</color>
-    <color name="screentimeColorContrast">#dcb977</color>
+    <color name="screentimeColorContrast">#b3e058</color>
 
     <!-- Colores principales -->
     <color name="colorPrimary">#1C1C24</color>        <!-- Negro cine -->
